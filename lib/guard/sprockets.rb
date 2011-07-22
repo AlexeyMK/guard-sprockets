@@ -7,6 +7,10 @@ require 'sprockets'
 
 module Guard
   class Sprockets < Guard
+    def init
+      puts "Ohai, initing"
+    end
+
     def initialize(watchers=[], options={})
       super 
       @destination = options[:destination]
