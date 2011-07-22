@@ -1,3 +1,5 @@
+### hacked by @AlexeyMK for a project... do not use w/o modification ###
+
 require 'guard'
 require 'guard/guard'
 
@@ -25,23 +27,18 @@ module Guard
     private
     
     def sprocketize(path)
-      parts        = path.split('/')
-      file         = parts.pop
-      source_dir   = "#{parts[0...-1].join('/')}/*"
-      destination  = parts[1..-1].join('/')
-      @destination ||= destination
-      secretary = ::Sprockets::Secretary.new(
-        :asset_root            => "#{parts.first}",
-        :source_files          => ["#{path}"],
+      secretary = Sprockets::Secretary.new(
+        :root         => '.',
+        :asset_root   => 'staging',
+        :load_path    => ['javascripts/'],
+        :source_files => ['javascripts/*.js'],
         :interpolate_constants => false
       )
-      # Generate a Sprockets::Concatenation object from the source files
-      concatenation = secretary.concatenation
-      # Write the concatenation to disk
-      concatenation.save_to("#{@destination}/#{file}")
-      # Install provided assets into the asset root
+
+      secretary.concatenation.save_to('staging/mobile.js')
+
       secretary.install_assets
-      UI.info "Sprockets creating file #{@destination}/#{file}"
+      UI.info "sprocket written to staging/mobile.js (lame, I know, but for now..."
     end
   end
 end
